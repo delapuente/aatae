@@ -1,0 +1,25 @@
+{
+  "name": "aatae-vt",
+  "version": "0.1.0",
+  "description": "AATAE Virtual trainer",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "cross-env webpack --progress --colors", 
+    "start": "webpack-dev-server --progress --colors --hot -d --host localhost",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Salvador de la Puente González <salva@unoyunodiez.com>",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "cross-env": "^5.0.0",
+    "shx": "^0.2.2",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}
