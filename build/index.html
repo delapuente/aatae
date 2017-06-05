@@ -3,16 +3,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>EATA - Entrenador virtual</title>
+  <title>AATAE - Entrenador virtual</title>
   <script src="lib/aframe.js"></script>
   <script src="lib/aframe-physics-system.js"></script>
   <script src="lib/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
   <script src="vt.js"></script>
 </head>
 <body>
-  <a-scene eata-vt screenshot physics="debug: false" avatar-recorder="autoPlay: false">
+  <a-scene aatae-vt screenshot physics="debug: true" avatar-recorder="autoPlay: false">
     <a-assets>
       <img id="logo" src="assets/eaata-logo.jpg"/ />
+      <a-asset-item id="fan-model" src="assets/fan.gltf"></a-asset-item>
+      <a-asset-item id="suction-pad-model" src="assets/suction_pad.gltf"></a-asset-item>
     </a-assets>
     <a-sky color="#646464"></a-sky>
     <a-box id="cardboard" dynamic-body="mass: 0.01" position="0 0.8 -0.60" geometry="width: 0.05; depth: 0.05; height: 0.003" color="#008000"></a-box></a-box>
@@ -24,15 +26,17 @@
                                   -0.012 0  0.012;
                             control: #hot-air-fan;
                             optimal: 235 535;
-                            gain: 10; loose: 1">
+                            gain: 40; loose: 1">
       </a-entity>
     </a-box>
     <a-box id="workbench" static-body src="#logo" position="0 0.75 -1" geometry="width: 2; depth: 1; height: 0.04"></a-box>
     <a-box id="floor" static-body position="0 0 0" color="#888" geometry="width: 10; depth: 10; height: 0.05"></a-box>
     <a-entity id="left-hand" static-body="shape: box" vive-controls="hand: left"></a-entity>
     <a-entity id="right-hand" static-body="shape: box" vive-controls="hand: right"></a-entity>
-    <a-cylinder id="hot-air-fan" class="tool" static-body position="0.30 0.80 -0.60" data-handheld-position="0.002 -0.015 0.09" rotation="-90 0 0" control-point="0 -0.1 0" color="blue" geometry="height: 0.18; radius: 0.0075"></a-cylinder>
-    <a-cylinder id="suction-pad" class="tool" static-body position="-0.30 0.80 -0.60" data-handheld-position="0.002 -0.05 -0.03" rotation="90 0 0" data-handheld-rotation="-90 180 0" control-point="0 -0.055 -0.01" color="green" geometry="height: 0.09; radius: 0.0075"></a-cylinder>
+    <a-entity id="hot-air-fan" class="tool" gltf-model="#fan-model" position="0.30 0.80 -0.60" data-handheld-position="0.015 -0.03 0.20" rotation="-90 0 0" control-point="0 0 0"></a-entity>
+    <a-entity id="suction-pad" class="tool" gltf-model="#suction-pad-model" position="-0.20 0.80 -0.70" data-handheld-position="0.01 -0.05 -0.1" rotation="0 -90 0" control-point="0 0 0">
+      <a-box id="suction-helper" static-body geometry="width: 0.001; height: 0.001; depth: 0.001" visible="false"></a-box>
+    </a-entity>
     <a-camera position="0 0 0" user-height="1.3">
     </a-camera>
     <a-box id="physicalChip" dynamic-body="mass: 0.5" geometry="width: 0.02; depth: 0.02; height: 0.001" color="#000">

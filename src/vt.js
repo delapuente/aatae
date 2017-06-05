@@ -7,6 +7,7 @@ let scene,
     rightHand,
     tools,
     suctionPad,
+    suctionHelper,
     workbench;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
     leftHand = document.getElementById('left-hand');
     rightHand = document.getElementById('right-hand');
     suctionPad = document.getElementById('suction-pad');
+    suctionHelper = document.getElementById('suction-helper');
     workbench = document.getElementById('workbench');
 
     tools = document.querySelectorAll('.tool');
@@ -50,7 +52,7 @@ window.addEventListener('DOMContentLoaded', () => {
               }
             });
             hand.object3D.children.forEach(child => child.visible = false);
-            hand.appendChild(tool);
+            tool.object3D.parent = hand.object3D;
           }
         }
       });
@@ -65,7 +67,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
         for (let i = 0, l = tools.length; i < l; i++) {
           let tool = tools[i];
-          if (tool.parentNode === hand) {
+          if (tool.object3D.parent === hand.object3D) {
             tool.sceneEl.appendChild(tool);
             hand.object3D.children.forEach(child => child.visible = true);
             tool.setAttribute('position', tool._oldvalues.position);
@@ -73,14 +75,14 @@ window.addEventListener('DOMContentLoaded', () => {
           }
         }
         const constraint2 = physicalChip.getAttribute('constraint');
-        if (constraint2 && constraint2.target === suctionPad) {
+        if (constraint2 && constraint2.target === suctionHelper) {
           physicalChip.removeAttribute('constraint');
         }
       });
 
       hand.addEventListener('triggerup', () => {
         console.log(`${hand.id}: triggerup`);
-        if (suctionPad.parentNode === hand) {
+        if (suctionPad.object3D.parent === hand.object3D) {
           const {x, y, z} = suctionPad.getAttribute('control-point');
           const localPosition = new THREE.Vector3(x, y, z);
           const controlPosition = suctionPad.object3D.localToWorld(localPosition);
@@ -93,7 +95,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 chip.parentNode.removeChild(chip);
                 chip = null;
                 physicalChip.setAttribute('dynamic-body', 'mass: 0.005');
-                physicalChip.setAttribute('constraint', `target: #${suctionPad.id}`);
+                physicalChip.setAttribute('constraint', 'target', `#${suctionHelper.id}`);
                 physicalChip.addEventListener('collide', ({ detail }) => {
                   if (detail.body === workbench.body) {
                     const v = detail.target.velocity.length();
@@ -110,7 +112,7 @@ window.addEventListener('DOMContentLoaded', () => {
           }
           const physicalChipPosition = physicalChip.object3D.getWorldPosition();
           if (controlPosition.distanceTo(physicalChipPosition) < 0.01) {
-            physicalChip.setAttribute('constraint', 'target', `#${suctionPad.id}`);
+            physicalChip.setAttribute('constraint', 'target', `#${suctionHelper.id}`);
           }
         }
       });
@@ -118,7 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
       hand.addEventListener('triggerdown', () => {
         console.log(`${hand.id}: triggerdown`);
         const constraint = physicalChip.getAttribute('constraint');
-        if (constraint && constraint.target === suctionPad) {
+        if (constraint && constraint.target === suctionHelper) {
           physicalChip.removeAttribute('constraint');
         }
       });
@@ -129,7 +131,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-AFRAME.registerComponent('eata-vt', {
+AFRAME.registerComponent('aatae-vt', {
   dependencies: ['physics'],
   init() {
     // Nesting does not seem to work
