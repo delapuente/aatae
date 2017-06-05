@@ -22,6 +22,13 @@ class RemoveWeld {
 
     this._trainer.addHandTargets([cardboard, physicalChip]);
 
+    chipWelding.addEventListener('temperaturechanged', ({ detail }) => {
+      const { temperature } = detail;
+      if (temperature === 'burnt') {
+        this._fatal('It is too hot! You\'ve melted other components!');
+      }
+    });
+
     hands.forEach(hand => {
       hand.addEventListener('gripup', () => {
         console.log(`${hand.id}: gripup`);
@@ -47,17 +54,23 @@ class RemoveWeld {
                 this._chip.chip = null;
                 physicalChip.setAttribute('dynamic-body', 'mass: 0.005');
                 physicalChip.setAttribute('constraint', 'target', `#${suctionHelper.id}`);
-                physicalChip.addEventListener('collide', ({ detail }) => {
+                const that = this;
+                physicalChip.addEventListener('collide', function _oncollide({ detail }) {
                   if (detail.body === workbench.body) {
                     const v = detail.target.velocity.length();
                     if (v > 0.7) {
                       physicalChip.setAttribute('color', 'red');
+                      that._fatal('You broke the chip! Be more careful next time.');
                     }
+                    else {
+                      that._success('Congratulations! You\'ve completed this step.');
+                    }
+                    physicalChip.removeEventListener('collide', _oncollide);
                   }
                 });
               }
               else {
-                console.log('así no vas a ningún lado');
+                this._info('The chip weld is not warm enough.');
               }
             }
           }
@@ -76,6 +89,24 @@ class RemoveWeld {
         }
       });
     });
+  }
+
+  _info(message) {
+    this._call('oninfo', message);
+  }
+
+  _fatal(message) {
+    this._call('onfatal', message);
+  }
+
+  _success(message) {
+    this._call('onsuccess', message);
+  }
+
+  _call(callback, message) {
+    if (typeof this[callback] === 'function') {
+      this[callback](message);
+    }
   }
 }
 

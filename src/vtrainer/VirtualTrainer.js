@@ -2,10 +2,10 @@
 import { distance } from '../helpers';
 
 class VirtualTrainer {
-  constructor(hands, tools, handTargets) {
+  constructor(hands, tools, ui) {
     this._hands = hands;
     this._tools = tools;
-    this._handTargets = handTargets;
+    this._ui = ui;
     this._setupInteractions();
   }
 
@@ -78,6 +78,9 @@ class VirtualTrainer {
   setStep(step) {
     this._step = step;
     this._step.setTrainer(this);
+    this._step.oninfo = this._ui.info.bind(this._ui);
+    this._step.onsuccess = this._ui.success.bind(this._ui);
+    this._step.onfatal = this._ui.fatal.bind(this._ui);
   }
 
   start() {
@@ -85,13 +88,13 @@ class VirtualTrainer {
   }
 }
 
-VirtualTrainer.fromTypicalScene = function (scene) {
+VirtualTrainer.fromTypicalScene = function (scene, ui) {
   const hands = [
     scene.querySelector('#left-hand'),
     scene.querySelector('#right-hand')
   ];
   const tools = scene.querySelectorAll('.tool');
-  return new VirtualTrainer(hands, tools);
+  return new VirtualTrainer(hands, tools, ui);
 };
 
 export { VirtualTrainer };

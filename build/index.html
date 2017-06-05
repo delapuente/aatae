@@ -7,10 +7,12 @@
   <script src="lib/aframe.js"></script>
   <script src="lib/aframe-physics-system.js"></script>
   <script src="lib/aframe-motion-capture-components.min.js"></script>
+  <script src="lib/aframe-html-source.js"></script>
+  <script src="lib/aframe-html-shader.min.js"></script>
   <script src="vt.js"></script>
 </head>
 <body>
-  <a-scene aatae-vt screenshot physics="debug: true" avatar-recorder="autoPlay: false">
+  <a-scene aatae-vt screenshot physics="debug: false" avatar-recorder="autoPlay: false">
     <a-assets>
       <img id="logo" src="assets/eaata-logo.jpg"/ />
       <a-asset-item id="fan-model" src="assets/fan.gltf"></a-asset-item>
@@ -22,12 +24,17 @@
     <a-box id="chip" position="0 0.002 0.005" geometry="width: 0.02; depth: 0.02; height: 0.001" color="#000">
       <a-entity position="0 0 0"
                 warming-guide="path: -0.012 0 -0.012,
+                                      0     0 -0.012,
                                       0.012 0 -0.012,
+                                      0.012 0  0,
                                       0.012 0  0.012,
-                                     -0.012 0  0.012;
+                                      0     0  0.012,
+                                     -0.012 0  0.012,
+                                     -0.012 0  0;
                                control: #hot-air-fan;
                                optimal: 235 535;
-                               gain: 40; loose: 1">
+                               gain: 35;
+                               loose: 1">
       </a-entity>
     </a-box>
     <a-box id="workbench" static-body src="#logo" position="0 0.75 -1" geometry="width: 2; depth: 1; height: 0.04"></a-box>
@@ -40,8 +47,37 @@
       <a-box id="suction-helper" static-body geometry="width: 0.001; height: 0.001; depth: 0.001" visible="false"></a-box>
     </a-entity>
     <a-camera position="0 0 0" user-height="1.3">
+      <a-entity ui-dialog="hold: 4; fade: 1" geometry="primitive: plane; width: 0.5" material="shader: html; target: #dialog; transparent: true; ratio: width; fps: 60" position="0 0 -0.5" visible="false"></a-entity>
     </a-camera>
     <a-box id="physical-chip" dynamic-body="mass: 0.5" geometry="width: 0.02; depth: 0.02; height: 0.001" color="#000"></a-box>
   </a-scene>
+  <style>
+    .visibility-wrapper {
+      position: absolute;
+      top:0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    #dialog {
+      padding: 0.5em;
+      background-color: black;
+      color: white;
+      border-radius: 7px;
+    }
+
+    .info {
+      border: 2px #54A5FF solid;
+    }
+    .success {
+      border: 2px #0FB216 solid;
+    }
+    .fatal {
+      border: 2px #B21119 solid;
+    }
+  </style>
+  <div class="visibility-wrapper">
+    <section id="dialog"></section>
+  </div>
 </body>
 </html>

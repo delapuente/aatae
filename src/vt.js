@@ -1,5 +1,5 @@
 import * as components from './components';
-import { VirtualTrainer } from './vtrainer';
+import { VirtualTrainer, UI } from './vtrainer';
 import { RemoveWeld } from './steps';
 
 function registerAll(components) {
@@ -13,8 +13,12 @@ registerAll(components);
 
 window.addEventListener('DOMContentLoaded', () => {
   const scene = document.querySelector('a-scene');
+  const ui = new UI(
+    document.querySelector('[ui-dialog]'),
+    document.querySelector('#dialog')
+  );
   scene.addEventListener('loaded', () => {
-    const vt = VirtualTrainer.fromTypicalScene(scene);
+    const vt = VirtualTrainer.fromTypicalScene(scene, ui);
     vt.setStep(RemoveWeld.fromTypicalScene(scene));
     vt.start();
   });
