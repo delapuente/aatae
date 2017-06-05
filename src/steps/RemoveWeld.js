@@ -1,6 +1,7 @@
 
 class RemoveWeld {
-  constructor(hands, chip, suctionPad) {
+  constructor(workbench, hands, chip, suctionPad) {
+    this._workbench = workbench;
     this._hands = hands;
     this._chip = chip;
     this._suctionPad = suctionPad;
@@ -12,6 +13,7 @@ class RemoveWeld {
 
   reset() {
     const hands = this._hands;
+    const workbench = this._workbench;
     const { suctionPad, suctionHelper } = this._suctionPad;
     const { cardboard, chip, chipWelding, physicalChip } = this._chip;
 
@@ -22,10 +24,15 @@ class RemoveWeld {
 
     this._trainer.addHandTargets([cardboard, physicalChip]);
 
-    chipWelding.addEventListener('temperaturechanged', ({ detail }) => {
-      const { temperature } = detail;
+    chipWelding.addEventListener('temperaturechanged', evt => {
+      const { temperature } = evt.detail;
       if (temperature === 'burnt') {
-        this._fatal('It is too hot! You\'ve melted other components!');
+        const { x, y, z } = chip.object3D.getWorldPosition();
+        console.log(x, y, z);
+        this._fatal(
+          'It is too hot! You\'ve melted other components!',
+          { x, y: y + 0.02, z }
+        );
       }
     });
 
@@ -57,20 +64,31 @@ class RemoveWeld {
                 const that = this;
                 physicalChip.addEventListener('collide', function _oncollide({ detail }) {
                   if (detail.body === workbench.body) {
+                    const { x, y, z } = physicalChip.getAttribute('position');
                     const v = detail.target.velocity.length();
                     if (v > 0.7) {
                       physicalChip.setAttribute('color', 'red');
-                      that._fatal('You broke the chip! Be more careful next time.');
+                      that._fatal(
+                        'You broke the chip! Be more careful next time.',
+                        {x, y: y + 0.02, z}
+                      );
                     }
                     else {
-                      that._success('Congratulations! You\'ve completed this step.');
+                      that._success(
+                        'Congratulations! You\'ve completed this step.',
+                        {x, y: y + 0.02, z}
+                      );
                     }
                     physicalChip.removeEventListener('collide', _oncollide);
                   }
                 });
               }
-              else {
-                this._info('The chip weld is not warm enough.');
+              else if (chipWelding.temperature === 'cold') {
+                const { x, y, z } = chipPosition;
+                this._info(
+                  'The chip weld is not warm enough.',
+                  { x, y: y + 0.02, z }
+                );
               }
             }
           }
@@ -91,16 +109,16 @@ class RemoveWeld {
     });
   }
 
-  _info(message) {
-    this._call('oninfo', message);
+  _info(text, anchor) {
+    this._call('oninfo', { text, anchor });
   }
 
-  _fatal(message) {
-    this._call('onfatal', message);
+  _fatal(text, anchor) {
+    this._call('onfatal', { text, anchor });
   }
 
-  _success(message) {
-    this._call('onsuccess', message);
+  _success(text, anchor) {
+    this._call('onsuccess', { text, anchor });
   }
 
   _call(callback, message) {
@@ -111,6 +129,7 @@ class RemoveWeld {
 }
 
 RemoveWeld.fromTypicalScene = function (scene) {
+  const workbench = scene.querySelector('#workbench');
   const hands = [
     scene.querySelector('#left-hand'),
     scene.querySelector('#right-hand')
@@ -125,7 +144,7 @@ RemoveWeld.fromTypicalScene = function (scene) {
     suctionPad: scene.querySelector('#suction-pad'),
     suctionHelper: scene.querySelector('#suction-pad > a-box')
   };
-  return new RemoveWeld(hands, chip, suctionPad);
+  return new RemoveWeld(workbench, hands, chip, suctionPad);
 };
 
 export { RemoveWeld };

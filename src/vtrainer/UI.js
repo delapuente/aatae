@@ -6,6 +6,7 @@ class UI {
   }
 
   info(message) {
+    console.log(message);
     this._show('info', message);
   }
 
@@ -17,11 +18,11 @@ class UI {
     this._show('fatal', message);
   }
 
-  _show(kind, message) {
-    this._dialogElement.innerText = message;
+  _show(kind, { text, anchor }) {
+    this._dialogElement.innerText = text;
     this._dialogElement.setAttribute('class', kind);
+    this._vrDialog.setAttribute('position', anchor);
     setTimeout(() => {
-      console.log(kind, message);
       this._vrDialog.components['ui-dialog'].show();
     }, 16);
   }

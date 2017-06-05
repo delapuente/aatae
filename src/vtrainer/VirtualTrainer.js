@@ -80,7 +80,14 @@ class VirtualTrainer {
     this._step.setTrainer(this);
     this._step.oninfo = this._ui.info.bind(this._ui);
     this._step.onsuccess = this._ui.success.bind(this._ui);
-    this._step.onfatal = this._ui.fatal.bind(this._ui);
+    this._step.onfatal = message => {
+      this._ui.fatal(message);
+      // TODO: Emit an event when the message dissappears and listen for it.
+      // Then, reload.
+      setTimeout(() => {
+        window.location = window.location;
+      }, 2000);
+    };
   }
 
   start() {
