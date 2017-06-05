@@ -1,0 +1,204 @@
+{
+    "accessors": {
+        "accessor_21": {
+            "bufferView": "bufferView_29",
+            "byteOffset": 0,
+            "byteStride": 2,
+            "componentType": 5123,
+            "count": 1332,
+            "max": [
+                665
+            ],
+            "min": [
+                0
+            ],
+            "type": "SCALAR"
+        },
+        "accessor_23": {
+            "bufferView": "bufferView_30",
+            "byteOffset": 0,
+            "byteStride": 12,
+            "componentType": 5126,
+            "count": 1332,
+            "max": [
+                1.5354,
+                0.0499999,
+                0.12
+            ],
+            "min": [
+                -0.03,
+                -0.0584487,
+                1.73632e-05
+            ],
+            "type": "VEC3"
+        },
+        "accessor_25": {
+            "bufferView": "bufferView_30",
+            "byteOffset": 15984,
+            "byteStride": 12,
+            "componentType": 5126,
+            "count": 1332,
+            "max": [
+                1,
+                0.941734,
+                1
+            ],
+            "min": [
+                -1,
+                -0.952495,
+                -1
+            ],
+            "type": "VEC3"
+        }
+    },
+    "animations": {},
+    "asset": {
+        "generator": "collada2gltf@0e0246bf330a4b34ee1d331960e5e82533540ba5",
+        "premultipliedAlpha": true,
+        "profile": {
+            "api": "WebGL",
+            "version": "1.0.2"
+        },
+        "version": "1.0.1"
+    },
+    "bufferViews": {
+        "bufferView_29": {
+            "buffer": "suction_pad",
+            "byteLength": 2664,
+            "byteOffset": 0,
+            "target": 34963
+        },
+        "bufferView_30": {
+            "buffer": "suction_pad",
+            "byteLength": 31968,
+            "byteOffset": 2664,
+            "target": 34962
+        }
+    },
+    "buffers": {
+        "suction_pad": {
+            "byteLength": 34632,
+            "type": "arraybuffer",
+            "uri": "suction_pad.bin"
+        }
+    },
+    "extensionsUsed": [
+        "KHR_materials_common"
+    ],
+    "materials": {
+        "Material-effect": {
+            "extensions": {
+                "KHR_materials_common": {
+                    "doubleSided": false,
+                    "jointCount": 0,
+                    "technique": "PHONG",
+                    "transparent": false,
+                    "values": {
+                        "ambient": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "diffuse": [
+                            0.64,
+                            0.64,
+                            0.64,
+                            1
+                        ],
+                        "emission": [
+                            0,
+                            0,
+                            0,
+                            1
+                        ],
+                        "shininess": 50,
+                        "specular": [
+                            0.5,
+                            0.5,
+                            0.5,
+                            1
+                        ]
+                    }
+                }
+            },
+            "name": "Material"
+        }
+    },
+    "meshes": {
+        "suction_pad-mesh": {
+            "name": "suction_pad",
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": "accessor_25",
+                        "POSITION": "accessor_23"
+                    },
+                    "indices": "accessor_21",
+                    "material": "Material-effect",
+                    "mode": 4
+                }
+            ]
+        }
+    },
+    "nodes": {
+        "Cylinder": {
+            "children": [],
+            "matrix": [
+                0.1,
+                0,
+                0,
+                0,
+                0,
+                0.1,
+                0,
+                0,
+                0,
+                0,
+                0.1,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "meshes": [
+                "suction_pad-mesh"
+            ],
+            "name": "Cylinder"
+        },
+        "node_1": {
+            "children": [
+                "Cylinder"
+            ],
+            "matrix": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                -1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "name": "Y_UP_Transform"
+        }
+    },
+    "scene": "defaultScene",
+    "scenes": {
+        "defaultScene": {
+            "nodes": [
+                "node_1"
+            ]
+        }
+    },
+    "skins": {}
+}
