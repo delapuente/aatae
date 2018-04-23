@@ -84,9 +84,6 @@ class VirtualTrainer {
       this._ui.fatal(message);
       // TODO: Emit an event when the message dissappears and listen for it.
       // Then, reload.
-      setTimeout(() => {
-        window.location = window.location;
-      }, 2000);
     };
   }
 
